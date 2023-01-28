@@ -7,16 +7,12 @@
 
 #define MANHATTAN_DISTANCE  1
 #define EUCLIDEAN_NORM      2
-#define NORM                1
 
-typedef struct Vector2
-{
-    int x, y;
-} Vector2;
+int NORM = 2;
 
 typedef struct Points
 {
-    Vector2 points[1024];
+    SDL_Point points[1024];
     size_t capacity;
 } Points;
 
@@ -33,7 +29,21 @@ void generateColors()
     }
 }
 
-void draw(SDL_Renderer *renderer, Vector2 size, Points *points)
+void drawCyrcle(SDL_Renderer *renderer, SDL_Point center, int radius)
+{
+    for (int x = center.x - radius; x <= center.x + radius; x++)
+    {
+        for (int y = center.y - radius; y <= center.y + radius; y++)
+        {
+            int dx = center.x - x;
+            int dy = center.y - y;
+            if (dx*dx + dy*dy < radius*radius)
+                SDL_RenderDrawPoint(renderer, x, y);
+        }
+    }
+}
+
+void draw(SDL_Renderer *renderer, SDL_Point size, Points *points)
 {
     for (int i = 0; i < size.x*size.y; i++)
     {
@@ -60,23 +70,23 @@ void draw(SDL_Renderer *renderer, Vector2 size, Points *points)
     SDL_RenderPresent(renderer);
 }
 
-void drawCyrcle(SDL_Renderer *renderer, Vector2 center, int radius)
-{
-    for (int x = center.x - radius; x <= center.x + radius; x++)
-    {
-        for (int y = center.y - radius; y <= center.y + radius; y++)
-        {
-            int dx = center.x - x;
-            int dy = center.y - y;
-            if (dx*dx + dy*dy < radius*radius)
-                SDL_RenderDrawPoint(renderer, x, y);
-        }
-    }
-}
-
-int main(void)
+int main(int argc, char *argv[])
 {
     srand(time(NULL));
+
+    int windowWidth = 800;
+    int windowHeight = 600;
+
+    if (argc >= 2)
+    {
+        NORM = atoi(argv[1]);
+
+        if (argc >= 4)
+        {
+            windowWidth = atoi(argv[2]);
+            windowHeight = atoi(argv[3]);
+        }
+    }
     
     SDL_Window *window;
     SDL_WindowFlags flags = SDL_WINDOW_RESIZABLE;
@@ -89,7 +99,7 @@ int main(void)
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    window = SDL_CreateWindow("Voronoi Diagram", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, flags);
+    window = SDL_CreateWindow("Voronoi Diagram", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, flags);
     renderer = SDL_CreateRenderer(window, -1, renderer_flags);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -122,7 +132,7 @@ int main(void)
 
                     int w, h;
                     SDL_GetWindowSize(window, &w, &h);
-                    draw(renderer, (Vector2){w, h}, &points);
+                    draw(renderer, (SDL_Point){w, h}, &points);
                 }
                 else if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
                 {
@@ -131,21 +141,21 @@ int main(void)
 
                     int w, h;
                     SDL_GetWindowSize(window, &w, &h);
-                    draw(renderer, (Vector2){w, h}, &points);
+                    draw(renderer, (SDL_Point){w, h}, &points);
                 }
                 break;
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_RESIZED)
                 {
-                    draw(renderer, (Vector2){event.window.data1, event.window.data2}, &points);
+                    draw(renderer, (SDL_Point){event.window.data1, event.window.data2}, &points);
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                points.points[points.capacity++] = (Vector2){event.button.x, event.button.y};
+                points.points[points.capacity++] = (SDL_Point){event.button.x, event.button.y};
 
                 int w, h;
                 SDL_GetWindowSize(window, &w, &h);
-                draw(renderer, (Vector2){w, h}, &points);
+                draw(renderer, (SDL_Point){w, h}, &points);
 
                 break;
             default:
