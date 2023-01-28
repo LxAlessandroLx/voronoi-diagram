@@ -5,5 +5,12 @@ A single source file program to draw Voronoi diagrams written in C using SDL2
 - a C compiler
 - [SDL2](https://www.libsdl.org/)
 
+## How to compile
+You can use the Makefile running ```$ make``` or compile it manually with you compiler.
+
+Here is an example with gcc:
+
+    gcc -o VoronoiDiagram  src/main.c  -Wall -Wextra `sdl2-config --cflags` -lm `sdl2-config --libs`
+
 ## Usage
-You can use a different norm by modifing the NORM macro
+    ./VoronoiDiagram [norm] [window windth] [window height]
