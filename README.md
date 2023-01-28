@@ -22,3 +22,6 @@ Voronoi diagram using Manhattan distance
 ![euclidean](/screenshots/manhattan.png)
 Voronoi diagram using -1 norm
 ![euclidean](/screenshots/minusone.png)
+
+---
+Copyright (C) 2022 Alessandro Chiozza - chiozzalessandro@gmail.com
