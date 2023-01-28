@@ -16,11 +16,12 @@ Here is an example with gcc:
     ./VoronoiDiagram [norm] [window windth] [window height]
 
 ## Examples
-Voronoi diagram using Euclidean norm
+Here are some screenshots of the program using different norms
+### Euclidean norm
 ![euclidean](/screenshots/euclidean.png)
-Voronoi diagram using Manhattan distance
+### Manhattan distance
 ![euclidean](/screenshots/manhattan.png)
-Voronoi diagram using -1 norm
+### -1 norm
 ![euclidean](/screenshots/minusone.png)
 
 ---
